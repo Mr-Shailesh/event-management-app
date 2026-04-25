@@ -65,13 +65,15 @@ export function EventCard({
         border: "1px solid #d8dee8",
         boxShadow: "0 3px 10px rgba(15, 23, 42, 0.06)",
         backgroundColor: "#fff",
+        overflow: "hidden",
       }}
     >
-      <Box sx={{ px: 3, pt: 3, pb: 1.5 }}>
+      <Box sx={{ px: { xs: 2, sm: 3 }, pt: { xs: 2.25, sm: 3 }, pb: 1.5 }}>
         <Box
           sx={{
             display: "flex",
-            alignItems: "flex-start",
+            flexDirection: { xs: "column", sm: "row" },
+            alignItems: { xs: "stretch", sm: "flex-start" },
             justifyContent: "space-between",
             gap: 2,
           }}
@@ -81,10 +83,11 @@ export function EventCard({
               variant="h6"
               sx={{
                 mb: 2,
-                fontSize: "1.05rem",
+                fontSize: { xs: "1rem", sm: "1.05rem" },
                 fontWeight: 700,
                 lineHeight: 1.2,
                 color: "#1a1a1a",
+                wordBreak: "break-word",
               }}
             >
               {event.title}
@@ -123,7 +126,7 @@ export function EventCard({
             label={status}
             sx={{
               mt: 0.25,
-              alignSelf: "flex-start",
+              alignSelf: { xs: "flex-start", sm: "flex-start" },
               borderRadius: "999px",
               bgcolor: statusColors[status].bg,
               color: statusColors[status].color,
@@ -135,15 +138,23 @@ export function EventCard({
       </Box>
 
       <CardContent
-        sx={{ display: "flex", flexDirection: "column", gap: 2.25, pt: 0 }}
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          gap: 2.25,
+          pt: 0,
+          px: { xs: 2, sm: 3 },
+          pb: { xs: 2.25, sm: 3 },
+        }}
       >
         <Typography
           variant="body1"
           sx={{
-            minHeight: 24,
+            minHeight: { xs: "auto", sm: 24 },
             color: "#5d6b82",
-            fontSize: "1rem",
+            fontSize: { xs: "0.95rem", sm: "1rem" },
             lineHeight: 1.55,
+            wordBreak: "break-word",
           }}
         >
           {event.description}
@@ -226,7 +237,7 @@ export function EventCard({
             <Box
               sx={{
                 display: "grid",
-                gridTemplateColumns: "1fr 1fr",
+                gridTemplateColumns: { xs: "1fr", sm: "1fr 1fr" },
                 gap: 1.25,
               }}
             >

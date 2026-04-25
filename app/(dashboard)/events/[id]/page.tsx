@@ -69,26 +69,45 @@ export default function EventDetailPage() {
 
   if (!event && !isNotFound) {
     return (
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="flex flex-col items-center gap-2">
+      <Box
+        sx={{
+          minHeight: "60vh",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          px: 2,
+        }}
+      >
+        <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 1 }}>
           <Spinner className="h-8 w-8" />
-          <p className="text-gray-500">Loading event details...</p>
-        </div>
-      </div>
+          <Typography variant="body2" sx={{ color: "#6b7280" }}>
+            Loading event details...
+          </Typography>
+        </Box>
+      </Box>
     );
   }
 
   if (isNotFound) {
     return (
-      <Card className="max-w-2xl mx-auto my-8 p-6 text-center">
-        <h2 className="text-xl font-semibold text-gray-900 mb-2">
+      <Card
+        sx={{
+          maxWidth: "42rem",
+          mx: "auto",
+          my: { xs: 4, md: 8 },
+          p: { xs: 3, md: 4 },
+          textAlign: "center",
+          border: "1px solid #d8dee8",
+        }}
+      >
+        <Typography variant="h5" sx={{ mb: 1, fontWeight: 700, color: "#111827" }}>
           Event not found
-        </h2>
-        <p className="text-gray-600 mb-6">
+        </Typography>
+        <Typography variant="body1" sx={{ mb: 3, color: "#4b5563" }}>
           The event you&apos;re looking for doesn&apos;t exist.
-        </p>
-        <Link href="/dashboard">
-          <Button>Back to Dashboard</Button>
+        </Typography>
+        <Link href="/dashboard" style={{ textDecoration: "none" }}>
+          <Button variant="contained">Back to Dashboard</Button>
         </Link>
       </Card>
     );
@@ -114,20 +133,34 @@ export default function EventDetailPage() {
   };
 
   return (
-    <div className="max-w-3xl mx-auto py-8">
+    <Box
+      sx={{
+        maxWidth: "56rem",
+        mx: "auto",
+        px: { xs: 2, md: 4 },
+        py: { xs: 3, md: 4 },
+      }}
+    >
       <Link
         href="/dashboard"
-        className="text-blue-600 hover:underline mb-4 inline-block"
+        style={{
+          display: "inline-block",
+          marginBottom: "1rem",
+          color: "#2563eb",
+          textDecoration: "none",
+          fontWeight: 600,
+        }}
       >
         ← Back to Dashboard
       </Link>
 
-      <Card sx={{ border: "1px solid #d8dee8" }}>
+      <Card sx={{ border: "1px solid #d8dee8", overflow: "hidden" }}>
         <CardHeader sx={{ pb: 1 }}>
           <Box
             sx={{
               display: "flex",
-              alignItems: "flex-start",
+              flexDirection: { xs: "column", sm: "row" },
+              alignItems: { xs: "stretch", sm: "flex-start" },
               justifyContent: "space-between",
               gap: 2,
             }}
@@ -135,7 +168,13 @@ export default function EventDetailPage() {
             <Box sx={{ flex: 1 }}>
               <Typography
                 variant="h4"
-                sx={{ mb: 1.75, fontWeight: 800, color: "#172033" }}
+                sx={{
+                  mb: 1.75,
+                  fontWeight: 800,
+                  color: "#172033",
+                  fontSize: { xs: "1.65rem", md: "2.125rem" },
+                  wordBreak: "break-word",
+                }}
               >
                 {event.title}
               </Typography>
@@ -172,73 +211,99 @@ export default function EventDetailPage() {
           </Box>
         </CardHeader>
 
-        <CardContent className="space-y-6">
-          <div>
-            <h3 className="text-lg font-semibold text-gray-900 mb-2">
+        <CardContent sx={{ display: "grid", gap: 3 }}>
+          <Box>
+            <Typography variant="h6" sx={{ mb: 1, fontWeight: 700, color: "#111827" }}>
               Description
-            </h3>
-            <p className="text-gray-700 whitespace-pre-wrap">
+            </Typography>
+            <Typography
+              variant="body1"
+              sx={{ color: "#374151", whiteSpace: "pre-wrap", wordBreak: "break-word" }}
+            >
               {event.description}
-            </p>
-          </div>
+            </Typography>
+          </Box>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 border-t pt-6">
-            <div>
-              <h3 className="text-sm font-medium text-gray-600 mb-1">Date</h3>
-              <p className="text-lg text-gray-900">
+          <Box
+            sx={{
+              display: "grid",
+              gridTemplateColumns: { xs: "1fr", md: "1fr 1fr" },
+              gap: 3,
+              borderTop: "1px solid #e5e7eb",
+              pt: 3,
+            }}
+          >
+            <Box>
+              <Typography variant="subtitle2" sx={{ mb: 0.5, color: "#6b7280" }}>
+                Date
+              </Typography>
+              <Typography variant="body1" sx={{ fontSize: "1.05rem", color: "#111827" }}>
                 {formatEventDateRange(event.startDateTime, event.endDateTime)}
-              </p>
-            </div>
+              </Typography>
+            </Box>
 
-            <div>
-              <h3 className="text-sm font-medium text-gray-600 mb-1">Time</h3>
-              <p className="text-lg text-gray-900">
+            <Box>
+              <Typography variant="subtitle2" sx={{ mb: 0.5, color: "#6b7280" }}>
+                Time
+              </Typography>
+              <Typography variant="body1" sx={{ fontSize: "1.05rem", color: "#111827" }}>
                 {formatEventTime(event.startDateTime)} -{" "}
                 {formatEventTime(event.endDateTime)}
-              </p>
-            </div>
+              </Typography>
+            </Box>
 
             {event.eventType === "In-Person" && event.location && (
-              <div>
-                <h3 className="text-sm font-medium text-gray-600 mb-1">
+              <Box>
+                <Typography variant="subtitle2" sx={{ mb: 0.5, color: "#6b7280" }}>
                   Location
-                </h3>
-                <p className="text-lg text-gray-900">{event.location}</p>
-              </div>
+                </Typography>
+                <Typography variant="body1" sx={{ fontSize: "1.05rem", color: "#111827", wordBreak: "break-word" }}>
+                  {event.location}
+                </Typography>
+              </Box>
             )}
 
             {event.eventType === "Online" && event.eventLink && (
-              <div>
-                <h3 className="text-sm font-medium text-gray-600 mb-1">
+              <Box>
+                <Typography variant="subtitle2" sx={{ mb: 0.5, color: "#6b7280" }}>
                   Event Link
-                </h3>
-                <a
+                </Typography>
+                <Box
+                  component="a"
                   href={event.eventLink}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-lg text-blue-600 hover:text-blue-800 break-all"
+                  sx={{
+                    fontSize: "1.05rem",
+                    color: "#2563eb",
+                    textDecoration: "none",
+                    wordBreak: "break-all",
+                    "&:hover": { color: "#1d4ed8" },
+                  }}
                 >
                   Join Event
-                </a>
-              </div>
+                </Box>
+              </Box>
             )}
 
-            <div>
-              <h3 className="text-sm font-medium text-gray-600 mb-1">
+            <Box>
+              <Typography variant="subtitle2" sx={{ mb: 0.5, color: "#6b7280" }}>
                 Organizer
-              </h3>
-              <p className="text-lg text-gray-900">{event.organizerName}</p>
-            </div>
+              </Typography>
+              <Typography variant="body1" sx={{ fontSize: "1.05rem", color: "#111827" }}>
+                {event.organizerName}
+              </Typography>
+            </Box>
 
-            <div>
-              <h3 className="text-sm font-medium text-gray-600 mb-1">
+            <Box>
+              <Typography variant="subtitle2" sx={{ mb: 0.5, color: "#6b7280" }}>
                 Created
-              </h3>
-              <p className="text-lg text-gray-900">
+              </Typography>
+              <Typography variant="body1" sx={{ fontSize: "1.05rem", color: "#111827" }}>
                 {formatEventDate(event.createdAt)}
-              </p>
-            </div>
-          </div>
+              </Typography>
+            </Box>
+          </Box>
 
           <DeleteConfirmationModal
             isOpen={showDeleteModal}
@@ -249,6 +314,6 @@ export default function EventDetailPage() {
           />
         </CardContent>
       </Card>
-    </div>
+    </Box>
   );
 }
