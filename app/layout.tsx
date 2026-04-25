@@ -5,6 +5,7 @@ import "./globals.css";
 import { AuthProvider } from "@/context/AuthContext";
 import { EventsProvider } from "@/context/EventsContext";
 import { FilterProvider } from "@/context/FilterContext";
+import { DateLocalizationProvider } from "@/components/DateLocalizationProvider";
 
 export const metadata: Metadata = {
   title: "Event Manager - Manage Your Events",
@@ -24,15 +25,17 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="font-sans antialiased">
-        <CssBaseline />
-        <AuthProvider>
-          <EventsProvider>
-            <FilterProvider>
-              {children}
-              <Toaster position="top-right" />
-            </FilterProvider>
-          </EventsProvider>
-        </AuthProvider>
+        <DateLocalizationProvider>
+          <CssBaseline />
+          <AuthProvider>
+            <EventsProvider>
+              <FilterProvider>
+                {children}
+                <Toaster position="top-right" />
+              </FilterProvider>
+            </EventsProvider>
+          </AuthProvider>
+        </DateLocalizationProvider>
       </body>
     </html>
   );

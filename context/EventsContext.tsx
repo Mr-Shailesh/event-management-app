@@ -1,5 +1,6 @@
 "use client";
 
+import dayjs from "dayjs";
 import React, {
   createContext,
   useCallback,
@@ -40,7 +41,7 @@ export function EventsProvider({ children }: { children: React.ReactNode }) {
       const newEvent: Event = {
         ...event,
         id: generateId(),
-        createdAt: new Date().toISOString(),
+        createdAt: dayjs().toISOString(),
       };
 
       const updatedEvents = [...events, newEvent];

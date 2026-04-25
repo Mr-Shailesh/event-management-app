@@ -1,9 +1,11 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo, useState, type ChangeEvent } from "react";
+import dayjs, { type Dayjs } from "dayjs";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Box, Typography } from "@mui/material";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { toast } from "sonner";
 import { EventCard } from "@/components/EventCard";
 import { Button, Input, Select, SelectItem } from "@/components/mui";
@@ -21,10 +23,17 @@ export default function DashboardPage() {
     setSearchQuery,
     setEventType,
     setCategory,
+    setDateFrom,
+    setDateTo,
     setSortBy,
-    setSortOrder,
   } = useFilters();
   const [isDeleting, setIsDeleting] = useState<string | null>(null);
+  const dateFromValue: Dayjs | null = filters.dateFrom
+    ? dayjs(filters.dateFrom)
+    : null;
+  const dateToValue: Dayjs | null = filters.dateTo
+    ? dayjs(filters.dateTo)
+    : null;
 
   const filteredEvents = useMemo(
     () => filterAndSortEvents(events, filters),
@@ -161,7 +170,9 @@ export default function DashboardPage() {
               type="text"
               placeholder="Search events..."
               value={filters.searchQuery}
-              onChange={(e: any) => setSearchQuery(e.target.value)}
+              onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                setSearchQuery(e.target.value)
+              }
               sx={{
                 "& .MuiOutlinedInput-root": {
                   height: 48,
@@ -229,22 +240,83 @@ export default function DashboardPage() {
               <SelectItem value="title">Title</SelectItem>
             </Select>
           </Box>
+        </Box>
 
-          <Box sx={{ maxWidth: { xs: "100%", lg: 200 } }}>
+        <Box
+          sx={{
+            maxWidth: { xs: "100%", lg: "32rem" },
+            mt: 2.5,
+          }}
+        >
+          <Box>
             <Typography
               variant="subtitle2"
               sx={{ mb: 1, fontWeight: 600, color: "#364256" }}
             >
-              Order
+              Date Range
             </Typography>
-            <Select
-              value={filters.sortOrder}
-              onChange={(e: any) => setSortOrder(e.target.value)}
-              sx={{ height: 48, borderRadius: "12px", bgcolor: "#fff" }}
+            <Box
+              sx={{
+                display: "grid",
+                gridTemplateColumns: { xs: "1fr", sm: "1fr 1fr" },
+                gap: 2,
+              }}
             >
-              <SelectItem value="asc">Ascending</SelectItem>
-              <SelectItem value="desc">Descending</SelectItem>
-            </Select>
+              <Box>
+                <Typography
+                  variant="subtitle2"
+                  sx={{ mb: 1, fontWeight: 600, color: "#364256" }}
+                >
+                  From
+                </Typography>
+                <DatePicker
+                  value={dateFromValue}
+                  onChange={(newValue) =>
+                    setDateFrom(newValue ? newValue.format("YYYY-MM-DD") : "")
+                  }
+                  slotProps={{
+                    textField: {
+                      fullWidth: true,
+                      size: "small",
+                      sx: {
+                        "& .MuiOutlinedInput-root": {
+                          height: 48,
+                          borderRadius: "12px",
+                          bgcolor: "#fff",
+                        },
+                      },
+                    },
+                  }}
+                />
+              </Box>
+              <Box>
+                <Typography
+                  variant="subtitle2"
+                  sx={{ mb: 1, fontWeight: 600, color: "#364256" }}
+                >
+                  To
+                </Typography>
+                <DatePicker
+                  value={dateToValue}
+                  onChange={(newValue) =>
+                    setDateTo(newValue ? newValue.format("YYYY-MM-DD") : "")
+                  }
+                  slotProps={{
+                    textField: {
+                      fullWidth: true,
+                      size: "small",
+                      sx: {
+                        "& .MuiOutlinedInput-root": {
+                          height: 48,
+                          borderRadius: "12px",
+                          bgcolor: "#fff",
+                        },
+                      },
+                    },
+                  }}
+                />
+              </Box>
+            </Box>
           </Box>
         </Box>
       </Box>

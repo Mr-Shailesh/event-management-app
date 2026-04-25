@@ -1,3 +1,4 @@
+import dayjs from "dayjs";
 import * as Yup from "yup";
 import { EventFormat, Category } from "@/types";
 
@@ -44,14 +45,14 @@ export const eventValidationSchema = (eventType: EventFormat) =>
       .required("Start date and time is required")
       .test("valid-date", "Invalid date format", (value) => {
         if (!value) return false;
-        return !isNaN(new Date(value).getTime());
+        return dayjs(value).isValid();
       }),
 
     endDateTime: Yup.string()
       .required("End date and time is required")
       .test("valid-date", "Invalid date format", (value) => {
         if (!value) return false;
-        return !isNaN(new Date(value).getTime());
+        return dayjs(value).isValid();
       })
       .test(
         "end-after-start",
@@ -59,7 +60,7 @@ export const eventValidationSchema = (eventType: EventFormat) =>
         function (value) {
           const { startDateTime } = this.parent;
           if (!value || !startDateTime) return true;
-          return new Date(value) > new Date(startDateTime);
+          return dayjs(value).isAfter(dayjs(startDateTime));
         },
       ),
 

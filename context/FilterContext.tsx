@@ -8,6 +8,8 @@ interface FilterContextType {
   setSearchQuery: (query: string) => void;
   setEventType: (type: EventFormat | "all") => void;
   setCategory: (category: Category | "all") => void;
+  setDateFrom: (date: string) => void;
+  setDateTo: (date: string) => void;
   setSortBy: (sortBy: "date" | "title") => void;
   setSortOrder: (order: "asc" | "desc") => void;
   resetFilters: () => void;
@@ -19,6 +21,8 @@ const DEFAULT_FILTERS: FilterOptions = {
   searchQuery: "",
   eventType: "all",
   category: "all",
+  dateFrom: "",
+  dateTo: "",
   sortBy: "date",
   sortOrder: "asc",
 };
@@ -36,6 +40,14 @@ export function FilterProvider({ children }: { children: React.ReactNode }) {
 
   const setCategory = (category: Category | "all") => {
     setFilters((prev) => ({ ...prev, category }));
+  };
+
+  const setDateFrom = (date: string) => {
+    setFilters((prev) => ({ ...prev, dateFrom: date }));
+  };
+
+  const setDateTo = (date: string) => {
+    setFilters((prev) => ({ ...prev, dateTo: date }));
   };
 
   const setSortBy = (sortBy: "date" | "title") => {
@@ -57,6 +69,8 @@ export function FilterProvider({ children }: { children: React.ReactNode }) {
         setSearchQuery,
         setEventType,
         setCategory,
+        setDateFrom,
+        setDateTo,
         setSortBy,
         setSortOrder,
         resetFilters,

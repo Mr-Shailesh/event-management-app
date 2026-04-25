@@ -1,5 +1,6 @@
 "use client";
 
+import dayjs from "dayjs";
 import React, {
   createContext,
   useCallback,
@@ -119,7 +120,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         username,
         email,
         passwordHash: hashPassword(password),
-        createdAt: new Date().toISOString(),
+        createdAt: dayjs().toISOString(),
       };
 
       const updatedUsers = [...users, newUser];

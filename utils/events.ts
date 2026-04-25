@@ -1,3 +1,4 @@
+import dayjs from "dayjs";
 import { Event, FilterOptions } from "@/types";
 
 export function checkEventOverlap(
@@ -5,16 +6,16 @@ export function checkEventOverlap(
   existingEvents: Event[],
   excludeEventId?: string,
 ): Event | null {
-  const newStart = new Date(newEvent.startDateTime).getTime();
-  const newEnd = new Date(newEvent.endDateTime).getTime();
+  const newStart = dayjs(newEvent.startDateTime).valueOf();
+  const newEnd = dayjs(newEvent.endDateTime).valueOf();
 
   for (const event of existingEvents) {
     if (excludeEventId && event.id === excludeEventId) {
       continue;
     }
 
-    const existingStart = new Date(event.startDateTime).getTime();
-    const existingEnd = new Date(event.endDateTime).getTime();
+    const existingStart = dayjs(event.startDateTime).valueOf();
+    const existingEnd = dayjs(event.endDateTime).valueOf();
 
     if (newStart < existingEnd && newEnd > existingStart) {
       return event;
@@ -50,14 +51,27 @@ export function filterAndSortEvents(
     filtered = filtered.filter((event) => event.category === filters.category);
   }
 
+  if (filters.dateFrom) {
+    const fromDate = dayjs(filters.dateFrom).startOf("day");
+    filtered = filtered.filter(
+      (event) => !dayjs(event.startDateTime).isBefore(fromDate),
+    );
+  }
+
+  if (filters.dateTo) {
+    const toDate = dayjs(filters.dateTo).endOf("day");
+    filtered = filtered.filter(
+      (event) => !dayjs(event.startDateTime).isAfter(toDate),
+    );
+  }
+
   filtered.sort((a, b) => {
     let comparison = 0;
 
     switch (filters.sortBy) {
       case "date":
         comparison =
-          new Date(a.startDateTime).getTime() -
-          new Date(b.startDateTime).getTime();
+          dayjs(a.startDateTime).valueOf() - dayjs(b.startDateTime).valueOf();
         break;
       case "title":
         comparison = a.title.localeCompare(b.title);
@@ -71,30 +85,21 @@ export function filterAndSortEvents(
 }
 
 export function formatEventDate(dateString: string): string {
-  const date = new Date(dateString);
-  return date.toLocaleDateString("en-US", {
-    month: "short",
-    day: "numeric",
-    year: "numeric",
-  });
+  return dayjs(dateString).format("MMM D, YYYY");
 }
 
 export function formatEventTime(dateString: string): string {
-  const date = new Date(dateString);
-  return date.toLocaleTimeString("en-US", {
-    hour: "2-digit",
-    minute: "2-digit",
-  });
+  return dayjs(dateString).format("hh:mm A");
 }
 
 export function getEventStatus(event: Event): string {
-  const now = new Date();
-  const startDate = new Date(event.startDateTime);
-  const endDate = new Date(event.endDateTime);
+  const now = dayjs();
+  const startDate = dayjs(event.startDateTime);
+  const endDate = dayjs(event.endDateTime);
 
-  if (now > endDate) {
+  if (now.isAfter(endDate)) {
     return "Completed";
-  } else if (now > startDate && now < endDate) {
+  } else if (now.isAfter(startDate) && now.isBefore(endDate)) {
     return "Ongoing";
   } else {
     return "Upcoming";

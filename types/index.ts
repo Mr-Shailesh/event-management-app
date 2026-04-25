@@ -41,6 +41,8 @@ export interface FilterOptions {
   searchQuery: string;
   eventType: EventFormat | "all";
   category: Category | "all";
+  dateFrom: string;
+  dateTo: string;
   sortBy: "date" | "title";
   sortOrder: "asc" | "desc";
 }
