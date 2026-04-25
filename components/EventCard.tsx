@@ -7,7 +7,7 @@ import { Card, CardContent, Badge, Button } from "@/components/mui";
 import { DeleteConfirmationModal } from "@/components/DeleteConfirmationModal";
 import { Event } from "@/types";
 import {
-  formatEventDate,
+  formatEventDateRange,
   formatEventTime,
   getEventStatus,
   canEditEvent,
@@ -157,7 +157,7 @@ export function EventCard({
             >
               Date:
             </Box>
-            {formatEventDate(event.startDateTime)}
+            {formatEventDateRange(event.startDateTime, event.endDateTime)}
           </Typography>
 
           <Typography variant="body1" sx={{ color: "#3e4b61" }}>

@@ -1,23 +1,32 @@
 import dayjs from "dayjs";
 import { Event, FilterOptions } from "@/types";
 
+function rangesOverlap(
+  rangeAStart: dayjs.Dayjs,
+  rangeAEnd: dayjs.Dayjs,
+  rangeBStart: dayjs.Dayjs,
+  rangeBEnd: dayjs.Dayjs,
+) {
+  return rangeAStart.isBefore(rangeBEnd) && rangeAEnd.isAfter(rangeBStart);
+}
+
 export function checkEventOverlap(
   newEvent: { startDateTime: string; endDateTime: string },
   existingEvents: Event[],
   excludeEventId?: string,
 ): Event | null {
-  const newStart = dayjs(newEvent.startDateTime).valueOf();
-  const newEnd = dayjs(newEvent.endDateTime).valueOf();
+  const newStart = dayjs(newEvent.startDateTime);
+  const newEnd = dayjs(newEvent.endDateTime);
 
   for (const event of existingEvents) {
     if (excludeEventId && event.id === excludeEventId) {
       continue;
     }
 
-    const existingStart = dayjs(event.startDateTime).valueOf();
-    const existingEnd = dayjs(event.endDateTime).valueOf();
+    const existingStart = dayjs(event.startDateTime);
+    const existingEnd = dayjs(event.endDateTime);
 
-    if (newStart < existingEnd && newEnd > existingStart) {
+    if (rangesOverlap(newStart, newEnd, existingStart, existingEnd)) {
       return event;
     }
   }
@@ -51,17 +60,21 @@ export function filterAndSortEvents(
     filtered = filtered.filter((event) => event.category === filters.category);
   }
 
-  if (filters.dateFrom) {
-    const fromDate = dayjs(filters.dateFrom).startOf("day");
-    filtered = filtered.filter(
-      (event) => !dayjs(event.startDateTime).isBefore(fromDate),
-    );
-  }
+  if (filters.dateFrom || filters.dateTo) {
+    const fromDate = filters.dateFrom
+      ? dayjs(filters.dateFrom).startOf("day")
+      : dayjs("1900-01-01").startOf("day");
+    const toDate = filters.dateTo
+      ? dayjs(filters.dateTo).endOf("day")
+      : dayjs("9999-12-31").endOf("day");
 
-  if (filters.dateTo) {
-    const toDate = dayjs(filters.dateTo).endOf("day");
-    filtered = filtered.filter(
-      (event) => !dayjs(event.startDateTime).isAfter(toDate),
+    filtered = filtered.filter((event) =>
+      rangesOverlap(
+        dayjs(event.startDateTime),
+        dayjs(event.endDateTime),
+        fromDate,
+        toDate,
+      ),
     );
   }
 
@@ -86,6 +99,24 @@ export function filterAndSortEvents(
 
 export function formatEventDate(dateString: string): string {
   return dayjs(dateString).format("MMM D, YYYY");
+}
+
+export function formatEventDateRange(
+  startDateString: string,
+  endDateString: string,
+): string {
+  const start = dayjs(startDateString);
+  const end = dayjs(endDateString);
+
+  if (start.isSame(end, "day")) {
+    return start.format("MMM D, YYYY");
+  }
+
+  if (start.isSame(end, "year")) {
+    return `${start.format("MMM D")} - ${end.format("MMM D, YYYY")}`;
+  }
+
+  return `${start.format("MMM D, YYYY")} - ${end.format("MMM D, YYYY")}`;
 }
 
 export function formatEventTime(dateString: string): string {

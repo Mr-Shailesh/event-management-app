@@ -8,6 +8,7 @@ import { useEvents } from "@/context/EventsContext";
 import { useAuth } from "@/context/AuthContext";
 import {
   formatEventDate,
+  formatEventDateRange,
   formatEventTime,
   getEventStatus,
   canEditEvent,
@@ -185,7 +186,7 @@ export default function EventDetailPage() {
             <div>
               <h3 className="text-sm font-medium text-gray-600 mb-1">Date</h3>
               <p className="text-lg text-gray-900">
-                {formatEventDate(event.startDateTime)}
+                {formatEventDateRange(event.startDateTime, event.endDateTime)}
               </p>
             </div>
 
