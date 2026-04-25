@@ -5,7 +5,15 @@ import { useFormik } from "formik";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { toast } from "sonner";
-import { Box, Typography, Stack } from "@mui/material";
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
+import {
+  Box,
+  Typography,
+  Stack,
+  IconButton,
+  InputAdornment,
+} from "@mui/material";
 import { useAuth } from "@/context/AuthContext";
 import { loginValidationSchema, LoginFormValues } from "@/utils/validation";
 import { Button, Input, Card, CardContent, CardHeader } from "@/components/mui";
@@ -14,6 +22,7 @@ export function LoginForm() {
   const router = useRouter();
   const { login } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   const form = useFormik<LoginFormValues>({
     initialValues: { email: "", password: "" },
@@ -118,12 +127,31 @@ export function LoginForm() {
             <Input
               id="password"
               name="password"
+              type={showPassword ? "text" : "password"}
               placeholder="••••••••"
               value={form.values.password}
               onChange={handleFieldChange}
               onBlur={form.handleBlur}
               disabled={isLoading}
               error={!!(form.errors.password && form.touched.password)}
+              slotProps={{
+                input: {
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton
+                        edge="end"
+                        onClick={() => setShowPassword((prev) => !prev)}
+                        disabled={isLoading}
+                        aria-label={
+                          showPassword ? "Hide password" : "Show password"
+                        }
+                      >
+                        {showPassword ? <VisibilityOff /> : <Visibility />}
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                },
+              }}
               sx={{
                 "& .MuiOutlinedInput-root": {
                   borderRadius: "12px",

@@ -5,7 +5,9 @@ import { useFormik } from "formik";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { toast } from "sonner";
-import { Box, Typography, Stack } from "@mui/material";
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
+import { Box, Typography, Stack, IconButton, InputAdornment } from "@mui/material";
 import { useAuth } from "@/context/AuthContext";
 import { signupValidationSchema, SignupFormValues } from "@/utils/validation";
 import { Button, Input, Card, CardContent, CardHeader } from "@/components/mui";
@@ -14,6 +16,8 @@ export function SignupForm() {
   const router = useRouter();
   const { signup } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const form = useFormik<SignupFormValues>({
     initialValues: {
@@ -157,12 +161,31 @@ export function SignupForm() {
             <Input
               id="password"
               name="password"
+              type={showPassword ? "text" : "password"}
               placeholder="••••••••"
               value={form.values.password}
               onChange={handleFieldChange}
               onBlur={form.handleBlur}
               disabled={isLoading}
               error={!!(form.errors.password && form.touched.password)}
+              slotProps={{
+                input: {
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton
+                        edge="end"
+                        onClick={() => setShowPassword((prev) => !prev)}
+                        disabled={isLoading}
+                        aria-label={
+                          showPassword ? "Hide password" : "Show password"
+                        }
+                      >
+                        {showPassword ? <VisibilityOff /> : <Visibility />}
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                },
+              }}
               sx={{
                 "& .MuiOutlinedInput-root": {
                   borderRadius: "12px",
@@ -196,6 +219,7 @@ export function SignupForm() {
             <Input
               id="confirmPassword"
               name="confirmPassword"
+              type={showConfirmPassword ? "text" : "password"}
               placeholder="••••••••"
               value={form.values.confirmPassword}
               onChange={handleFieldChange}
@@ -204,6 +228,30 @@ export function SignupForm() {
               error={
                 !!(form.errors.confirmPassword && form.touched.confirmPassword)
               }
+              slotProps={{
+                input: {
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton
+                        edge="end"
+                        onClick={() => setShowConfirmPassword((prev) => !prev)}
+                        disabled={isLoading}
+                        aria-label={
+                          showConfirmPassword
+                            ? "Hide password"
+                            : "Show password"
+                        }
+                      >
+                        {showConfirmPassword ? (
+                          <VisibilityOff />
+                        ) : (
+                          <Visibility />
+                        )}
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                },
+              }}
               sx={{
                 "& .MuiOutlinedInput-root": {
                   borderRadius: "12px",
