@@ -20,6 +20,7 @@ interface EventsContextType {
   updateEvent: (id: string, event: Partial<Event>) => Promise<void>;
   deleteEvent: (id: string) => Promise<void>;
   getEventById: (id: string) => Event | undefined;
+  resetEvents: () => void;
 }
 
 const EventsContext = createContext<EventsContextType | undefined>(undefined);
@@ -82,6 +83,10 @@ export function EventsProvider({ children }: { children: React.ReactNode }) {
     [events],
   );
 
+  const resetEvents = useCallback(() => {
+    setEvents([]);
+  }, []);
+
   const value = useMemo(
     () => ({
       isHydrated,
@@ -90,8 +95,17 @@ export function EventsProvider({ children }: { children: React.ReactNode }) {
       updateEvent,
       deleteEvent,
       getEventById,
+      resetEvents,
     }),
-    [isHydrated, events, addEvent, updateEvent, deleteEvent, getEventById],
+    [
+      isHydrated,
+      events,
+      addEvent,
+      updateEvent,
+      deleteEvent,
+      getEventById,
+      resetEvents,
+    ],
   );
 
   return (

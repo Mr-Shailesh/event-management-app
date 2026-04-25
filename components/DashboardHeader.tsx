@@ -20,12 +20,16 @@ import {
 } from "@mui/material";
 import { Avatar, Button } from "@/components/mui";
 import { useAuth } from "@/context/AuthContext";
+import { useEvents } from "@/context/EventsContext";
+import { useFilters } from "@/context/FilterContext";
 import { getInitials } from "@/utils/auth";
 import { clearLocalStorage } from "@/utils/storage";
 
 export function DashboardHeader() {
   const router = useRouter();
   const { user, logout } = useAuth();
+  const { resetEvents } = useEvents();
+  const { resetFilters } = useFilters();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [isCleanupOpen, setIsCleanupOpen] = useState(false);
   const [isCleaningUp, setIsCleaningUp] = useState(false);
@@ -61,6 +65,8 @@ export function DashboardHeader() {
 
     try {
       logout();
+      resetEvents();
+      resetFilters();
       clearLocalStorage();
       setIsCleanupOpen(false);
       router.replace("/login");
