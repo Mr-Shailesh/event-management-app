@@ -26,6 +26,7 @@ export default function DashboardPage() {
     setDateFrom,
     setDateTo,
     setSortBy,
+    resetFilters,
   } = useFilters();
   const [isDeleting, setIsDeleting] = useState<string | null>(null);
   const dateFromValue: Dayjs | null = filters.dateFrom
@@ -141,12 +142,33 @@ export default function DashboardPage() {
           py: { xs: 2.5, md: 3 },
         }}
       >
-        <Typography
-          variant="h6"
-          sx={{ mb: 3, fontWeight: 800, color: "#151c2e" }}
+        <Box
+          sx={{
+            mb: 3,
+            display: "flex",
+            flexDirection: { xs: "column", sm: "row" },
+            justifyContent: "space-between",
+            alignItems: { xs: "stretch", sm: "center" },
+            gap: 2,
+          }}
         >
-          Filters & Search
-        </Typography>
+          <Typography variant="h6" sx={{ fontWeight: 800, color: "#151c2e" }}>
+            Filters & Search
+          </Typography>
+          <Button
+            type="button"
+            variant="outlined"
+            onClick={resetFilters}
+            sx={{
+              alignSelf: { xs: "flex-start", sm: "center" },
+              minWidth: 152,
+              borderRadius: "12px",
+              fontWeight: 700,
+            }}
+          >
+            Clear All Filters
+          </Button>
+        </Box>
 
         <Box
           sx={{
@@ -335,6 +357,7 @@ export default function DashboardPage() {
               display: "grid",
               gridTemplateColumns: {
                 xs: "1fr",
+                md: "repeat(2, minmax(0, 1fr))",
                 xl: "repeat(3, minmax(0, 1fr))",
               },
               gap: 3,

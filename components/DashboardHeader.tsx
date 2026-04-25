@@ -90,7 +90,8 @@ export function DashboardHeader() {
           display: "flex",
           justifyContent: "space-between",
           px: { xs: 2, md: 3 },
-          minHeight: 66,
+          minHeight: { xs: 62, md: 66 },
+          gap: 1.5,
         }}
       >
         <Link href="/dashboard" style={{ textDecoration: "none" }}>
@@ -99,7 +100,7 @@ export function DashboardHeader() {
             sx={{
               fontWeight: 800,
               color: "#2f5bea",
-              fontSize: "1.45rem",
+              fontSize: { xs: "1.1rem", sm: "1.45rem" },
               letterSpacing: "-0.03em",
             }}
           >
@@ -190,6 +191,10 @@ export function DashboardHeader() {
                   display: { xs: "none", sm: "inline" },
                   fontWeight: 500,
                   color: "#111827",
+                  maxWidth: 140,
+                  whiteSpace: "nowrap",
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
                 }}
               >
                 {displayName}
@@ -223,6 +228,13 @@ export function DashboardHeader() {
                 onClick={handleMenuClose}
               >
                 Dashboard
+              </MenuItem>
+              <MenuItem
+                component={Link}
+                href="/events/create"
+                onClick={handleMenuClose}
+              >
+                Create Event
               </MenuItem>
               <Divider />
               <MenuItem onClick={handleCleanupOpen}>Clean Up</MenuItem>
