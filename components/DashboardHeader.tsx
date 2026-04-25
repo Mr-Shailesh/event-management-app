@@ -133,6 +133,18 @@ export function DashboardHeader() {
                 Events
               </Typography>
             </Link>
+            <Link href="/calendar" style={{ textDecoration: "none" }}>
+              <Typography
+                variant="body2"
+                sx={{
+                  fontWeight: 500,
+                  color: "#283247",
+                  "&:hover": { color: "#000" },
+                }}
+              >
+                Calendar
+              </Typography>
+            </Link>
             <Link href="/events/create" style={{ textDecoration: "none" }}>
               <Typography
                 variant="body2"
