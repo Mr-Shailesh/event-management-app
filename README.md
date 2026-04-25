@@ -1,14 +1,15 @@
 # Event Management App
 
-A modern event management app built with Next.js, React, TypeScript, and MUI. It includes authentication screens, a protected dashboard, and full event CRUD flows using browser `localStorage` for persistence.
+A modern event management app built with Next.js, React, TypeScript, and MUI. It includes authentication screens, protected dashboard routes, calendar browsing, and full event CRUD flows using browser `localStorage` for persistence.
 
 ## Features
 
 - User signup and login
 - Protected dashboard routes
 - Create, view, edit, and delete events
-- Filter and search events
-- Form validation with Yup
+- Dashboard filters for search, category, event type, date range, and sorting
+- Calendar view with month, week, day, and agenda modes
+- Form validation with Formik and Yup
 - Local persistence for users and events with `localStorage`
 - Responsive UI built with MUI and Tailwind-based global styling
 
@@ -18,8 +19,12 @@ A modern event management app built with Next.js, React, TypeScript, and MUI. It
 - React 19
 - TypeScript
 - MUI
+- MUI X Date Pickers
 - Tailwind CSS
+- Formik
 - Yup
+- Day.js
+- React Big Calendar
 - Sonner
 
 ## Project Structure
@@ -33,6 +38,7 @@ app/
   (auth)/login/page.tsx
   (auth)/signup/page.tsx
   (dashboard)/layout.tsx
+  (dashboard)/calendar/page.tsx
   (dashboard)/dashboard/page.tsx
   (dashboard)/events/layout.tsx
   (dashboard)/events/create/page.tsx
@@ -40,6 +46,7 @@ app/
   (dashboard)/events/[id]/edit/page.tsx
 components/
   DashboardHeader.tsx
+  DateLocalizationProvider.tsx
   DeleteConfirmationModal.tsx
   EventCard.tsx
   EventForm.tsx
@@ -58,10 +65,9 @@ context/
   AuthContext.tsx
   EventsContext.tsx
   FilterContext.tsx
-hooks/
-  useForm.ts
 types/
   index.ts
+  react-big-calendar.d.ts
 utils/
   auth.ts
   events.ts
@@ -107,13 +113,15 @@ npm run lint
 - Passwords are hashed before being stored
 - Auth state is managed through `AuthContext`
 - Protected routes redirect unauthenticated users to `/login`
+- The account menu includes a cleanup action that clears local app data
 
 ### Events
 
 - Events are stored in browser `localStorage`
 - Logged-in users can manage their own events
 - Dashboard separates personal events from other events
-- Filters support search, category, event type, and sorting
+- Filters support search, category, event type, date range, and sorting
+- Calendar view displays all events and opens event details from selected calendar items
 
 ## Notes
 
@@ -121,15 +129,6 @@ npm run lint
 - Since data is stored in the browser, clearing site storage will remove saved users and events.
 - The dev script uses `next dev --webpack` to avoid Turbopack instability in local development.
 - Keep a single lockfile/package manager in the repo to avoid dependency mismatches.
-- The repo currently still contains empty or legacy folders like `components/ui`, `lib`, and `styles` that are not part of the active app flow.
-
-## Future Improvements
-
-- Add a backend and database
-- Replace local auth with real session handling
-- Add role-based access control
-- Add automated tests
-- Add event image upload and richer event metadata
 
 ## License
 
